@@ -13,6 +13,7 @@ class Coin:
     def get_side(self):
         return self.side
     
+    
 # # Create a coin instance
 # my_coin = Coin()
 
