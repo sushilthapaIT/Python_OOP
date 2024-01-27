@@ -1,25 +1,22 @@
-#Sushil Thapa
-#C0919991
-#Assignment 1
-#Jan 25, 2024
-
-
 from Account import Account
 
 class Savings(Account):
-    def __init__(self, owner, interestRate, currency = 'CAD', balance = 0):
+    def __init__(self, owner, interest_rate, currency = "CAD", balance = 0.0):
         super().__init__(owner, currency, balance)
-        self.rate = interestRate
+        self.interest_rate = interest_rate
 
-        if currency not in self.conversion_rates:
-            print("ERROR: Unsupported currency type")
+        if interest_rate < 0:
+            print("ERROR: InterestRate should be a non-negative value")
 
-    def applyInterest(self):
-        monthly_interest = (self.balance * self.rate) / 100/ 12
+    def apply_interest(self):
+        monthly_interest = (self.balance * self.interest_rate / 100) / 12
         self.balance += monthly_interest
 
-    def set_interest_rate(self, new_interest_rate):
-        self.rate = new_interest_rate
+    def set_interest_rate(self, new_rate):
+        if new_rate < 0:
+            print("ERROR: InterestRate should be a non-negative value")
+        else:
+            self.interest_rate = new_rate
 
     def get_interest_rate(self):
-        return self.rate
+        return self.interest_rate

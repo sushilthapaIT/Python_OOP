@@ -1,48 +1,43 @@
-#Sushil Thapa
-#C0919991
-#Assignment 1
-#Jan 25, 2024
-
-
 from Account import Account
 
 class Chequing(Account):
-    def __init__(self, owner, fee, overdraftLimit, currency='CAD', balance = 0):
+    def __init__(self, owner, fee, overdraft_limit, currency = "CAD", balance = 0.0):
         super().__init__(owner, currency, balance)
         self.fee = fee
-        self.overdraftLimit = overdraftLimit
+        self.overdraft_limit = overdraft_limit
 
-        if currency not in self.conversion_rates:
-            print("ERROR: Unsupported currency type")
+        if overdraft_limit < 0:
+            print("ERROR: OverdraftLimit should be a positive value")
 
-        if overdraftLimit < 0:
-            print("ERROR: Overdarft limit has been exceed")
+        if balance > overdraft_limit:
+            print("ERROR: Overdraft limit has been exceeded")
 
     def withdraw(self, amount):
         if amount < 0:
             print("ERROR: Value for withdraw is restricted to positive values")
         else:
-            total_withdraw = amount + self.fee
-            if self.balance - total_withdraw < -self.overdraftLimit:
-                print("ERROR: Overdraft limit has been exceeded")
+            if self.balance - amount - self.fee < -self.overdraft_limit:
+                print("ERROR: Overdraft limit will be exceeded. Withdrawal abandoned!")
             else:
-                self.balance -= total_withdraw
+                self.balance -= (amount + self.fee)
 
     def set_fee(self, new_fee):
-        self.fee = new_fee
-    
+        if new_fee < 0:
+            print("ERROR: Fee should be a positive value")
+        else:
+            self.fee = new_fee
+
     def get_fee(self):
         return self.fee
-    
+
     def set_overdraft_limit(self, new_limit):
-        if self.balance - new_limit < 0:
-            print("ERROR: Overdraft limit will be exceeded. Update abandones!")
+        if new_limit < 0 or self.balance < -new_limit:
+            print("ERROR: Overdraft limit will be exceeded. Update abandoned!")
         else:
-            self.overdraftLimit = new_limit
+            self.overdraft_limit = new_limit
 
     def get_overdraft_limit(self):
-        return self.overdraftLimit
+        return self.overdraft_limit
 
     def __str__(self):
-        base_info = super().__str__()
-        return f"{base_info}\nfee: {self.conversion_rates[self.currency][1]}{self.fee:.2f}\nOverdraft Limit: {self.conversion_rates[self.currency][1]}{self.overdraftLimit:.2f}"
+        return super().__str__() + f"\nFee: {self.conversion_rates[self.currency][1]}{self.fee:.2f}\nOverdraft Limit: {self.conversion_rates[self.currency][1]}{self.overdraft_limit:.2f}"
